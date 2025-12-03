@@ -1,0 +1,152 @@
+/* ===== Общие стили ===== */
+.custom-table {
+  font-size: 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.custom-table th,
+.custom-table td {
+  vertical-align: middle;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.table-header {
+  background-color: #f7f8fa;
+  font-weight: bold;
+  border-bottom: 2px solid #ccc;
+}
+
+/* ===== Кнопки ===== */
+.btn-edit {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.btn-edit:hover {
+  background-color: #0056b3;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.btn-delete:hover {
+  background-color: #b71c1c;
+}
+
+/* ===== Статусы ===== */
+.status-green {
+  color: green;
+  font-weight: bold;
+}
+
+.status-red {
+  color: red;
+  font-weight: bold;
+}
+
+/* ===== Hover строк ===== */
+.table-responsive .custom-table tbody tr:hover,
+.custom-table tbody tr:hover td {
+  background-color: #f8f9fa !important;
+  transition: background-color 0.2s ease;
+}
+
+/* ===== Кликабельные строки ===== */
+.table-responsive .custom-table .table-row-clickable:hover,
+.custom-table .table-row-clickable:hover td {
+  background-color: #e3f2fd !important;
+  cursor: pointer;
+  position: relative;
+}
+
+.table-row-clickable:hover td:last-child::after {
+  opacity: 0.6;
+}
+
+/* ===== Responsive Design ===== */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 992px) {
+  .custom-table {
+    font-size: 13px;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-table {
+    font-size: 12px;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 5px 6px;
+    white-space: nowrap;
+  }
+  
+  .btn-edit,
+  .btn-delete {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .d-flex.gap-2 {
+    gap: 0.25rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .table-responsive {
+    margin: 0 -15px;
+    border-radius: 0;
+  }
+  
+  .custom-table {
+    font-size: 11px;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 4px 5px;
+  }
+  
+  
+  .btn-edit,
+  .btn-delete {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  
+  .btn-edit svg,
+  .btn-delete svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Горизонтальная прокрутка на всех устройствах */
+@media (max-width: 480px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+    width: 100%;
+  }
+  
+  .custom-table {
+    min-width: 600px;
+  }
+}

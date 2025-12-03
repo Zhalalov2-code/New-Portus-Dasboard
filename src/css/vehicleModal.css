@@ -1,0 +1,389 @@
+/* Vehicle Modal Chat Styles */
+.vehicle-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.vehicle-modal {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-header {
+    background: linear-gradient(180deg, #0084ff 0%, #0066cc 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-subtitle {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.modal-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-content {
+    padding: 0;
+    height: calc(90vh - 80px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Messages Chat */
+.messages-chat {
+    flex: 1;
+    padding: 20px 30px 80px 30px;
+    overflow-y: auto;
+    min-height: 0;
+    position: relative;
+}
+
+.messages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.messages-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.messages-count {
+    color: #666;
+    font-size: 0.9rem;
+    background: #f1f3f4;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.messages-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+/* Message Items */
+.message-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid #007bff;
+    transition: all 0.2s ease;
+}
+
+.message-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.message-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.driver-name {
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.message-time {
+    color: #999;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+}
+
+.message-content {
+    color: #333;
+}
+
+.message-text {
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+}
+
+.message-images {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.message-image {
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e9ecef;
+}
+
+.message-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.message-image img:hover {
+    transform: scale(1.05);
+}
+
+/* No Messages State */
+.no-messages {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.no-messages-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.no-messages p {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+}
+
+.no-messages small {
+    color: #999;
+}
+
+.me-1 {
+    margin-right: 4px;
+}
+
+.delete-button-container {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 30px;
+}
+
+@media (max-width: 1200px) {
+    .vehicle-modal {
+        max-width: 1000px;
+    }
+}
+
+@media (max-width: 992px) {
+    .vehicle-modal {
+        max-width: 800px;
+    }
+    
+    .modal-header {
+        padding: 18px 25px;
+    }
+    
+    .messages-chat {
+        padding: 15px 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .vehicle-modal {
+        width: 95%;
+        max-height: 95vh;
+        border-radius: 15px;
+    }
+    
+    .modal-header {
+        padding: 15px 20px;
+    }
+    
+    .modal-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .modal-close-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .messages-chat {
+        padding: 15px 20px;
+    }
+    
+    .messages-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .message-images {
+        justify-content: center;
+    }
+    
+    .message-image {
+        width: 100px;
+        height: 75px;
+    }
+    
+    .message-item {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .vehicle-modal {
+        width: 98%;
+        max-height: 98vh;
+        border-radius: 10px;
+    }
+    
+    .modal-header {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+    }
+    
+    .modal-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .modal-close-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .messages-chat {
+        padding: 12px 15px;
+    }
+    
+    .messages-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .messages-header h3 {
+        font-size: 1rem;
+    }
+    
+    .messages-count {
+        font-size: 0.85rem;
+    }
+    
+    .message-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .message-time {
+        font-size: 0.8rem;
+    }
+    
+    .message-text {
+        font-size: 0.9rem;
+    }
+    
+    .message-image {
+        width: 80px;
+        height: 60px;
+    }
+    
+    .no-messages {
+        padding: 30px 15px;
+    }
+    
+    .no-messages-icon {
+        font-size: 2.5rem;
+    }
+    
+    .no-messages p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .modal-header {
+        padding: 10px 12px;
+    }
+    
+    .messages-chat {
+        padding: 10px 12px;
+    }
+    
+    .message-item {
+        padding: 10px;
+    }
+    
+    .message-image {
+        width: 70px;
+        height: 52px;
+    }
+}

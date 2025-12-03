@@ -1,0 +1,19 @@
+/* Общие стили для статусов TÜF/SP */
+.status-pill {
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  padding: 0.35rem 0.6rem;
+}
+
+.badge.bg-success {
+  background-color: #28a745 !important;
+}
+
+.badge.bg-warning.text-dark {
+  background-color: #ffc107 !important;
+  color: #222 !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
