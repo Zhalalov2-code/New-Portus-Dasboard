@@ -16,8 +16,24 @@ export const lkwApi = createApi({
         getLkws: builder.query<Lkw[], void>({
             query: () => 'lkw',
             providesTags: ['Lkw'],
-        })
+        }),
+        updateLkw: builder.mutation<Lkw, Lkw>({
+            query: (lkw) => ({
+                url: 'lkw',
+                method: 'PUT',
+                body: lkw,
+            }),
+            invalidatesTags: ['Lkw'],
+        }),
+        createLkw: builder.mutation<Lkw, Omit<Lkw, 'id_lkw'>>({
+            query: (lkw) => ({
+                url: 'lkw',
+                method: 'POST',
+                body: lkw,
+            }),
+            invalidatesTags: ['Lkw'],
+        }),
     }),
 });
 
-export const { useGetLkwsQuery } = lkwApi;
+export const { useGetLkwsQuery, useUpdateLkwMutation, useCreateLkwMutation } = lkwApi;

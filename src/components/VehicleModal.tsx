@@ -17,12 +17,17 @@ import '../css/vehicleModal.css';
 type Message = Message_lkw | Message_chassi;
 type FileType = Files_lkw | Files_chassi;
 
-const MessageItem: React.FC<{
+const MessageItem = ({
+    message,
+    type,
+    selectedIds,
+    onCheckboxChange
+}: {
     message: Message;
     type: 'lkw' | 'chassi';
     selectedIds: number[];
     onCheckboxChange: (id: number) => void;
-}> = ({ message, type, selectedIds, onCheckboxChange }) => {
+}) => {
     const { data: lkwFilesResponse } = useGetFilesByMessageLkwQuery(message.id_message, {
         skip: type !== 'lkw'
     });
@@ -32,7 +37,7 @@ const MessageItem: React.FC<{
     });
 
     const filesResponse = type === 'lkw' ? lkwFilesResponse : chassiFilesResponse;
-    const uploadPath = type === 'lkw' ? 'uploads_lkw' : 'uploads_chassi';
+    const uploadPath = type === 'lkw' ? 'lkw' : 'chassi';
 
     const files: FileType[] = (() => {
         if (!filesResponse) return [];
@@ -45,8 +50,6 @@ const MessageItem: React.FC<{
         }
         return [];
     })();
-
-
 
     return (
         <div className="message-item">
@@ -71,13 +74,14 @@ const MessageItem: React.FC<{
 
             <div className="message-content">
                 <p className="message-text">{message.text}</p>
+                {'address' in message && <p className="message-text">{message.address}</p>}
 
                 {files.length > 0 && (
                     <div className="message-images">
                         {files.map((file: any) => (
                             <div key={file.id_file || file.id_files} className="message-image">
                                 <img
-                                    src={`http://localhost/portusApp1/${uploadPath}/${file.file_name}`}
+                                    src={`http://localhost/portusApp1/api/uploads/${uploadPath}/${file.file_name}`}
                                     alt={file.file_name}
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
@@ -98,16 +102,16 @@ interface VehicleModalProps {
     onClose: () => void;
     vehicle: {
         id?: number;
-        id_lkw?: number; // Для LKW данных
-        id_chassi?: number; // Для шасси данных
-        lkw_nummer?: string; // Для данных из API
+        id_lkw?: number;
+        id_chassi?: number;
+        lkw_nummer?: string;
         chassiNummer?: string;
-        chassi_nummer?: string; // На случай если в API поле называется по-другому
+        chassi_nummer?: string;
     } | null;
     type: 'lkw' | 'chassi';
 }
 
-const VehicleModal: React.FC<VehicleModalProps> = ({ isOpen, onClose, vehicle, type }) => {
+const VehicleModal = ({ isOpen, onClose, vehicle, type }: VehicleModalProps) => {
 
     const vehicleId = type === 'lkw'
         ? (vehicle as any)?.id_lkw
@@ -128,6 +132,7 @@ const VehicleModal: React.FC<VehicleModalProps> = ({ isOpen, onClose, vehicle, t
     } = useGetMessagesByChassiQuery(vehicleId || 0, {
         skip: !isOpen || !vehicle || !vehicleId || type !== 'chassi'
     });
+
     const [deleteMessageLkw, { isLoading: isDeletingLkwMessage }] = useDeleteMessageLkwMutation();
     const [deleteMessageChassi, { isLoading: isDeletingChassiMessage }] = useDeleteMessageChassiMutation();
 

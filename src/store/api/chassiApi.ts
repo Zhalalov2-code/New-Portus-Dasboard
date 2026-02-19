@@ -15,8 +15,24 @@ export const chassiApi = createApi({
         getChassi: builder.query<Chassi[], void>({
             query: () => 'chassi',
             providesTags: ['Chassi'],
-        })
+        }),
+        updateChassi: builder.mutation<Chassi, Chassi>({
+            query: (chassi) => ({
+                url: 'chassi',
+                method: 'PUT',
+                body: chassi,
+            }),
+            invalidatesTags: ['Chassi'],
+        }),
+        createChassi: builder.mutation<Chassi, Omit<Chassi, 'id_chassi'>>({
+            query: (chassi) => ({
+                url: 'chassi',
+                method: 'POST',
+                body: chassi,
+            }),
+            invalidatesTags: ['Chassi'],
+        }),
     }),
 });
 
-export const { useGetChassiQuery } = chassiApi;
+export const { useGetChassiQuery, useUpdateChassiMutation, useCreateChassiMutation } = chassiApi;

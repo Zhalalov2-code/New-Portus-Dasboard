@@ -1,9 +1,12 @@
-import { useGetChassiQuery } from "../store/api/chassiApi";
+import { useGetChassiQuery, useUpdateChassiMutation, useCreateChassiMutation } from "../store/api/chassiApi";
 import Table, { TableColmn } from "../components/table";
 import VehicleModal from "../components/VehicleModal";
+import EditModal, { EditField } from "../components/EditModal";
+import AddModal, { AddField } from "../components/AddModal";
 import { useVehicleModal } from "../hooks/useVehicleModal";
 import { daysUntil, formatRuDate } from "../utils/dateStatus";
 import "../css/status.css";
+import { useState } from "react";
 
 export interface Chassi {
     id_chassi: number;
@@ -30,11 +33,11 @@ const colums: TableColmn<any>[] = [
                 </span>
             );
             if (days === null) return <span className="text-muted">—</span>;
-            if (days < 0) return pill(`TÜF: просрочено на ${Math.abs(days)} дн.`, 'bg-danger');
-            if (days === 0) return pill('TÜF: сегодня', 'bg-warning text-dark');
-            if (days <= 7) return pill(`TÜF: через ${days} дн.`, 'bg-warning text-dark');
+            if (days < 0) return pill(`TÜF: ${Math.abs(days)} Tage überfällig.`, 'bg-danger');
+            if (days === 0) return pill('TÜF: heute', 'bg-warning text-dark');
+            if (days <= 7) return pill(`TÜF: in ${days} Tagen`, 'bg-warning text-dark');
             const until = formatRuDate(row.tuf);
-            return pill(`TÜF: ОК до ${until}`, 'bg-success');
+            return pill(`TÜF: ОК bis ${until}`, 'bg-success');
         }
     },
     {
@@ -51,29 +54,65 @@ const colums: TableColmn<any>[] = [
                 </span>
             );
             if (days === null) return <span className="text-muted">—</span>;
-            if (days < 0) return pill(`SP: просрочено на ${Math.abs(days)} дн.`, 'bg-danger');
-            if (days === 0) return pill('SP: сегодня', 'bg-warning text-dark');
-            if (days <= 7) return pill(`SP: через ${days} дн.`, 'bg-warning text-dark');
+            if (days < 0) return pill(`SP: ${Math.abs(days)} Tage überfällig.`, 'bg-danger');
+            if (days === 0) return pill('SP: heute', 'bg-warning text-dark');
+            if (days <= 7) return pill(`SP: in ${days} Tagen`, 'bg-warning text-dark');
             const until = formatRuDate(row.esp);
-            return pill(`SP: ОК до ${until}`, 'bg-success');
+            return pill(`SP: ОК bis ${until}`, 'bg-success');
         }
     },
 ];
 
 const ChassiListe = () => {
     const { data: items = [], isLoading: loading, error } = useGetChassiQuery();
+    const [updateChassi, { isLoading: isUpdating }] = useUpdateChassiMutation();
+    const [createChassi, { isLoading: isCreating }] = useCreateChassiMutation();
     const { isOpen, selectedVehicle, vehicleType, openModal, closeModal } = useVehicleModal();
+    const [editingChassi, setEditingChassi] = useState<any>(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
 
-    // Вспомогательные функции перенесены в общий хелпер utils/dateStatus
+    const editFields: EditField[] = [
+        { name: 'chassi_nummer', label: 'Chassi Nummer', type: 'text', required: true },
+        { name: 'tuf', label: 'TÜF Datum', type: 'date', required: true },
+        { name: 'esp', label: 'SP Datum', type: 'date', required: true },
+    ];
 
-    // Статус рендерится через render-колонку, дополнительных данных не формируем
+    const addFields: AddField[] = [
+        { name: 'chassi_nummer', label: 'Chassi Nummer', type: 'text', required: true },
+        { name: 'tuf', label: 'TÜF Datum', type: 'date', required: true },
+        { name: 'esp', label: 'SP Datum', type: 'date', required: true },
+    ];
 
-    const handleRowClick = (row: any) => {
+    const handleChatClick = (row: any) => {
         openModal(row, 'chassi');
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {JSON.stringify(error)}</div>;
+    const handleEditClick = (row: any) => {
+        setEditingChassi(row);
+        setShowEditModal(true);
+    };
+
+    const handleSaveEdit = async (data: any) => {
+        try {
+            await updateChassi(data).unwrap();
+            setShowEditModal(false);
+        } catch (error) {
+            console.error('Fehler beim Aktualisieren des Chassis:', error);
+        }
+    };
+
+    const handleSaveAdd = async (data: any) => {
+        try {
+            await createChassi(data).unwrap();
+            setShowAddModal(false);
+        } catch (error) {
+            console.error('Fehler beim Erstellen des Chassi:', error);
+        }
+    };
+
+    if (loading) return <div>Laden...</div>;
+    if (error) return <div>Fehler: {JSON.stringify(error)}</div>;
 
     return (
         <>
@@ -81,17 +120,26 @@ const ChassiListe = () => {
                 <div className="row">
                     <div className="col-12">
                         <h1>Chassi Liste</h1>
-                        <button
-                            className="btn btn-primary mb-3"
-                        >
-                            Neuen Chassi hinzufügen
-                        </button>
+                        <div className="d-flex gap-2 mb-3 flex-wrap">
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setShowAddModal(true)}
+                            >
+                                Neuen Chassi hinzufügen
+                            </button>
+                            <button
+                                className="btn btn-outline-secondary"
+                                onClick={() => window.location.reload()}
+                            >
+                                Aktualisieren
+                            </button>
+                        </div>
                         <Table
                             columns={colums}
                             data={items}
-                            onEdit={(row) => alert(`Редактировать: ${row.chassi_nummer}`)}
-                            onDelete={(row) => alert(`Удалить: ${row.chassi_nummer}`)}
-                            onRowClick={handleRowClick}
+                            onChat={handleChatClick}
+                            onEdit={handleEditClick}
+                            onDelete={(row) => alert(`Löschen: ${row.chassi_nummer}`)}
                         />
                     </div>
                 </div>
@@ -102,6 +150,25 @@ const ChassiListe = () => {
                 onClose={closeModal}
                 vehicle={selectedVehicle}
                 type={vehicleType}
+            />
+
+            <EditModal
+                show={showEditModal}
+                onHide={() => setShowEditModal(false)}
+                title="Chassi bearbeiten"
+                data={editingChassi}
+                fields={editFields}
+                onSave={handleSaveEdit}
+                loading={isUpdating}
+            />
+
+            <AddModal
+                show={showAddModal}
+                onHide={() => setShowAddModal(false)}
+                title="Neuen Chassi hinzufügen"
+                fields={addFields}
+                onSave={handleSaveAdd}
+                loading={isCreating}
             />
         </>
     );

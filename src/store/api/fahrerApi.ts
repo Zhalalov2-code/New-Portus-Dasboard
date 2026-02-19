@@ -18,8 +18,24 @@ export interface Fahrer {
         getFahrers: builder.query<Fahrer[], void>({
             query: () => 'fahrer',
             providesTags: ['Fahrer'],
-        })
+        }),
+        updateFahrer: builder.mutation<Fahrer, Fahrer>({
+            query: (fahrer) => ({
+                url: 'fahrer',
+                method: 'PUT',
+                body: fahrer,
+            }),
+            invalidatesTags: ['Fahrer'],
+        }),
+        createFahrer: builder.mutation<Fahrer, Omit<Fahrer, 'id_fahrer'>>({
+            query: (fahrer) => ({
+                url: 'fahrer',
+                method: 'POST',
+                body: fahrer,
+            }),
+            invalidatesTags: ['Fahrer'],
+        }),
     })
 })
 
-export const { useGetFahrersQuery } = fahrerApi;
+export const { useGetFahrersQuery, useUpdateFahrerMutation, useCreateFahrerMutation } = fahrerApi;

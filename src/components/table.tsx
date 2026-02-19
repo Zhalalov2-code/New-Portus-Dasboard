@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { AiOutlineDelete } from "react-icons/ai";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdChatBubbleOutline } from "react-icons/md";
 import '../css/table.css';
 
 export interface TableColmn<T> {
@@ -14,10 +14,11 @@ export interface TableProps<T> {
     columns: TableColmn<T>[];
     onEdit?: (row: T) => void;
     onDelete?: (row: T) => void;
-    onRowClick?: (row: T) => void;
+    onChat?: (row: T) => void;
 }
 
-const Table = <T extends { id?: number | string }>({ data, columns, onEdit, onDelete, onRowClick }: TableProps<T>) => {
+const Table = <T extends { id?: number | string }>({ data, columns, onEdit, onDelete, onChat }: TableProps<T>) => {
+    const hasActions = Boolean(onEdit || onDelete || onChat);
     return (
         <>
             <div className="container-fluid my-3">
@@ -30,7 +31,7 @@ const Table = <T extends { id?: number | string }>({ data, columns, onEdit, onDe
                                         {columns.map((col) => (
                                             <th key={String(col.key)}>{col.label}</th>
                                         ))}
-                                        {(onEdit || onDelete) && <th>Действия</th>}
+                                        {hasActions && <th>Aktionen</th>}
                                     </tr>
                                 </thead>
 
@@ -38,34 +39,37 @@ const Table = <T extends { id?: number | string }>({ data, columns, onEdit, onDe
                                     {data.length === 0 ? (
                                         <tr>
                                             <td
-                                                colSpan={columns.length + 1}
+                                                colSpan={columns.length + (hasActions ? 1 : 0)}
                                                 className="text-center text-muted"
                                             >
-                                                Нет данных
+                                                Keine Daten verfügbar.
                                             </td>
                                         </tr>
                                     ) : (
                                         data.map((row, index) => (
                                             <tr 
                                                 key={String(row.id ?? index)}
-                                                onClick={() => onRowClick?.(row)}
-                                                style={{ 
-                                                    cursor: onRowClick ? 'pointer' : 'default' 
-                                                }}
-                                                className={onRowClick ? 'table-row-clickable' : ''}
                                             >
                                                 {columns.map((col) => (
                                                     <td key={String(col.key)}>
                                                         {col.render ? col.render(row[col.key], row) : String(row[col.key])}
                                                     </td>
                                                 ))}
-                                                {(onEdit || onDelete) && (
+                                                {hasActions && (
                                                     <td>
                                                         <div className="d-flex justify-content-center gap-2">
+                                                            {onChat && (
+                                                                <button
+                                                                    className="btn btn-sm btn-chat"
+                                                                    onClick={(e) => { e.stopPropagation(); onChat(row); }}
+                                                                >
+                                                                    <MdChatBubbleOutline size={16} />
+                                                                </button>
+                                                            )}
                                                             {onEdit && (
                                                                 <button
                                                                     className="btn btn-sm btn-edit"
-                                                                    onClick={() => onEdit(row)}
+                                                                    onClick={(e) => { e.stopPropagation(); onEdit(row); }}
                                                                 >
                                                                     <MdEdit />
                                                                 </button>
@@ -73,7 +77,7 @@ const Table = <T extends { id?: number | string }>({ data, columns, onEdit, onDe
                                                             {onDelete && (
                                                                 <button
                                                                     className="btn btn-sm btn-delete"
-                                                                    onClick={() => onDelete(row)}
+                                                                    onClick={(e) => { e.stopPropagation(); onDelete(row); }}
                                                                 >
                                                                     <AiOutlineDelete />
                                                                 </button>

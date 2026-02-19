@@ -18,25 +18,49 @@
   border-bottom: 2px solid #ccc;
 }
 
-/* ===== Кнопки ===== */
-.btn-edit {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
+/* ===== Кнопки в колонке действий ===== */
+.btn-edit,
+.btn-delete,
+.btn-chat {
+  background: #f8f9fa;
+  color: #1f2933;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 6px 10px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: all 0.15s ease;
 }
 
-.btn-edit:hover {
-  background-color: #0056b3;
+.btn-edit:hover,
+.btn-delete:hover,
+.btn-chat:hover {
+  background: #eef2f6;
+  border-color: #c4ccd4;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.btn-edit:active,
+.btn-delete:active,
+.btn-chat:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-edit {
+  color: #0b57d0;
 }
 
 .btn-delete {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
+  color: #d92d20;
 }
 
-.btn-delete:hover {
-  background-color: #b71c1c;
+.btn-chat {
+  color: #0f8fa0;
 }
 
 /* ===== Статусы ===== */
@@ -98,6 +122,7 @@
   }
   
   .btn-edit,
+  .btn-chat,
   .btn-delete {
     padding: 4px 8px;
     font-size: 12px;

@@ -20,6 +20,7 @@ export interface Message_chassi{
     id_message: number
     type_sender: string
     text: string
+    address: string
     created_ad: string
 }
 
